@@ -20,7 +20,10 @@ type Product struct {
 }
 
 // use one long string for comparisions below
-const JSON_PRODUCT1 = `{"docType":"product","productId":"productId1","gtin":"gtin1","serialNumber":"serialNumber1","lotNumber":"lotNumber1","expiryDate":"2019-01-07T17:31:00.106Z","fingerPrint":"fingerPrint1","drugName":"drugName","mfgName":"mfgName","mfgDateTime":"2019-01-07T17:31:00.106Z","gtinSource":"glnSource", "extraAttribute1":"extraAttribute1","extraAttribute2":"extraAttribute2"}`
+const JSON_PRODUCT1 = `{"docType":"product","productId":"productId1","gtin":"gtin1","serialNumber":"serialNumber1","lotNumber":"lotNumber1","expiryDate":"2019-01-07T17:31:00.106Z", "fingerPrint":"fingerPrint1", "drugName":"drugName","mfgName":"mfgName","mfgDateTime":"2019-01-07T17:31:00.106Z","gtinSource":"glnSource", "extraAttribute1":"extraAttribute1","extraAttribute2":"extraAttribute2"}`
+const JSON_PRODUCT_NO_EXTRAS = `{"docType":"product","productId":"productId1","gtin":"gtin1","serialNumber":"serialNumber1","lotNumber":"lotNumber1","expiryDate":"2019-01-07T17:31:00.106Z","fingerPrint":"fingerPrint1"}`
+const JSON_PRODUCT_NO_FINGERPRINT = `{"docType":"product","productId":"productId1","gtin":"gtin1","serialNumber":"serialNumber1","lotNumber":"lotNumber1","expiryDate":"2019-01-07T17:31:00.106Z"}`
+
 /*
 const JSON_PRODUCT1 = `{ 
 	"docType": "product", 
@@ -54,7 +57,10 @@ func main() {
 	product.SerialNumber = product.Data["serialNumber"].(string)
 	product.LotNumber = product.Data["lotNumber"].(string)
 	product.ExpiryDate = product.Data["expiryDate"].(string)
-	product.FingerPrint = product.Data["fingerPrint"].(string)
+	if val, ok := product.Data["fingerPrint"]; ok {
+		product.FingerPrint = val.(string)
+		delete(product.Data, "fingerPrint")
+	} 
 
 	delete(product.Data, "docType")
 	delete(product.Data, "productId")
@@ -62,7 +68,6 @@ func main() {
 	delete(product.Data, "serialNumber")
 	delete(product.Data, "lotNumber")
 	delete(product.Data, "expiryDate")
-	delete(product.Data, "fingerPrint")
 
 	fmt.Println()
 	fmt.Println("JSON_PRODUCT1")
